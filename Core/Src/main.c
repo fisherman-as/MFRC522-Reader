@@ -104,6 +104,9 @@ int main(void)
 
   uint8_t data_massive[2] = {0};
   mfrc522_handle_t InitStruct;
+  uint8_t in_buf[2] = {0};
+  uint8_t out_buf[100] = {0};
+  uint8_t length = 5;
 
   while (1)
   {
@@ -120,11 +123,9 @@ int main(void)
 	  mfrc522_interface_spi_read(0x31, data_massive, 1);
 
 
+	  mfrc522_basic_transceiver(in_buf, 2/*sizeof(in_buf)/sizeof(uint8_t)*/, out_buf, &length);
 
-	 // mfrc522_interface_spi_read(0x37, data_massive, 1);
 
-
-	  //HAL_UART_Transmit(&huart1, (uint8_t *)"hello\r\n", 7, 10);
 	  mfrc522_interface_debug_print("this is fantastish\r\n");
 	  HAL_Delay(3000);
 

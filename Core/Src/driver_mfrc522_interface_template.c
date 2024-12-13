@@ -300,7 +300,7 @@ void mfrc522_interface_delay_ms(uint32_t ms)
 void mfrc522_interface_debug_print(const char *const fmt, ...)
 {
 	uint32_t size = 1;
-	while((fmt[size] != '\n') && size<30)
+	while((fmt[size] != '\0') && size<100)
 	{
 		size++;
 	}
