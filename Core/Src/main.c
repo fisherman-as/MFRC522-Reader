@@ -23,6 +23,8 @@
 /* USER CODE BEGIN Includes */
 #include "driver_mfrc522_basic.h"
 #include "as_functions.h"
+#include "rc522.h"
+#include "string.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,7 +48,9 @@ SPI_HandleTypeDef hspi1;
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-
+uint8_t status;
+uint8_t str[MAX_LEN]; // Max_LEN = 16
+uint8_t sNum[5];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -95,7 +99,7 @@ int main(void)
   MX_SPI1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  MFRC522_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -113,21 +117,45 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	 // mfrc522_init(&InitStruct);
-
-	  uint8_t xxx = 0x05;
-	  uint8_t yyy = 0x03;
-	  mfrc522_interface_spi_write(0x31, &xxx, 1);
-	  mfrc522_interface_spi_read(0x31, data_massive, 1);
-	  mfrc522_interface_spi_write(0x31, &yyy, 1);
-	  mfrc522_interface_spi_read(0x31, data_massive, 1);
 
 
-	  mfrc522_basic_transceiver(in_buf, 2/*sizeof(in_buf)/sizeof(uint8_t)*/, out_buf, &length);
+	  status = MFRC522_Request(PICC_REQIDL, str);
+	  status = MFRC522_Anticoll(str);
+	  memcpy(sNum, str, 5);
+	  HAL_Delay(100);
+	  // if((str[0]==115) && (str[1]==93) && (str[2]==75) && (str[3]==22) && (str[4]==115) )
+	  // {
+	    // HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,0);
+	    // HAL_Delay(100);
+	    // }
+	  // else if((str[0]==199) && (str[1]==102) && (str[2]==209) && (str[3]==215) && (str[4]==167) )
+	    // {
+	    // HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,0);
+	    // HAL_Delay(2000);
+	  // }
+	  // else
+	  // {
+	    // HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,1);
+	  // }
 
 
-	  mfrc522_interface_debug_print("this is fantastish\r\n");
-	  HAL_Delay(3000);
+
+
+
+
+//	  uint8_t xxx = 0x05;
+//	  uint8_t yyy = 0x03;
+//	  mfrc522_interface_spi_write(0x31, &xxx, 1);
+//	  mfrc522_interface_spi_read(0x31, data_massive, 1);
+//	  mfrc522_interface_spi_write(0x31, &yyy, 1);
+//	  mfrc522_interface_spi_read(0x31, data_massive, 1);
+//
+//
+//	  mfrc522_basic_transceiver(in_buf, 2/*sizeof(in_buf)/sizeof(uint8_t)*/, out_buf, &length);
+//
+//
+//	  mfrc522_interface_debug_print("this is fantastish\r\n");
+//	  HAL_Delay(3000);
 
 
   }
