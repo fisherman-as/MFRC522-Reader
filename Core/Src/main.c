@@ -105,29 +105,23 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-
-  uint8_t data_massive[2] = {0};
-  mfrc522_handle_t InitStruct;
-  uint8_t in_buf[2] = {0};
-  uint8_t out_buf[100] = {0};
-  uint8_t length = 5;
-
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 
-
+	  memset(str, 0, MAX_LEN);
+	  memset(sNum, 0, 5);
 	  status = MFRC522_Request(PICC_REQIDL, str);
 	  status = MFRC522_Anticoll(str);
 	  memcpy(sNum, str, 5);
 	  HAL_Delay(100);
-	  // if((str[0]==115) && (str[1]==93) && (str[2]==75) && (str[3]==22) && (str[4]==115) )
-	  // {
-	    // HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,0);
-	    // HAL_Delay(100);
-	    // }
+	   if((str[0]==105) && (str[1]==138) && (str[2]==141) && (str[3]==24) && (str[4]==118) )
+	   {
+	     mfrc522_interface_debug_print("this is fantastish\r\n");
+	     HAL_Delay(100);
+	     }
 	  // else if((str[0]==199) && (str[1]==102) && (str[2]==209) && (str[3]==215) && (str[4]==167) )
 	    // {
 	    // HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,0);
@@ -180,7 +174,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL2;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -195,7 +189,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
     Error_Handler();
   }
@@ -224,7 +218,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
